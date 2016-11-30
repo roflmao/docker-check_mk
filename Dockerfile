@@ -1,9 +1,11 @@
-FROM progrium/busybox
+FROM ubuntu:16.04
 
-MAINTAINER marko.celan@gmail.com
+MAINTAINER rolf@jottacloud.com
 
-RUN /usr/bin/opkg-install procps bash curl xinetd
+RUN apt-get update && apt-get install -y xinetd python curl gzip
 
-RUN /usr/bin/curl -k -L https://github.com/markocelan/docker-check_mk/raw/master/files/check-mk-agent_1.2.2p3-2_all.tgz | gunzip | tar -xpC /
+COPY etc /etc/
+COPY usr /usr/
+
 
 ENTRYPOINT [ "/usr/sbin/xinetd", "-f", "/etc/xinetd.conf", "-dontfork", "-stayalive" ]
